@@ -1,6 +1,14 @@
 .user-panel form {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    width: auto;
     display: flex;
     flex-direction: column;
     gap: 5px;
     align-items: flex-start;
+    border: 1px #c4c4c4 solid;
+    border-top: 20px #f74464 solid;
+    border-radius: 10px;
 }

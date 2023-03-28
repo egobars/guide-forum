@@ -1,0 +1,27 @@
+.sidebar ul {
+    padding-left: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.sidebar a {
+    font-size: 15px;
+}
+
+.categories-list-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 1px #c4c4c4 solid;
+    border-left: 5px #f74464 solid;
+    border-right: 1px #c4c4c4 solid;
+    border-bottom: 1px #c4c4c4 solid;
+    border-radius: 5px;
+    padding-left: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: padding-left 0.3s, border-left 0s;
+}
+
+.categories-list-item:hover {
+    padding-left: 30px;
+}

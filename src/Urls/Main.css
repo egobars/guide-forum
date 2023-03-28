@@ -1,0 +1,32 @@
+.guides-list-panel {
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 160px);
+    gap: 10px;
+    grid-auto-rows: 1fr;
+}
+
+.guide-panel {
+    height: 90%;
+    width: 150px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 10px 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.guide-panel span {
+    font-size: 15px;
+}
+
+.guide-panel:hover {
+    cursor: pointer;
+    scale: 1.05;
+}
+
+.guide-panel-a a {
+    text-decoration: none;
+    color: black;
+}

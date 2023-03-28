@@ -1,8 +1,15 @@
 import React from "react";
-import './GuideCentralList.css';
-import '../CentralList.css';
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import './Add.css';
+import Header from "../../Components/Header/Header";
+import Basement from "../../Components/Basement/Basement";
+import CentralList from "../../Components/CentralList/CentralList";
+import BasicSidebar from "../../Components/Sidebars/BasicSidebar/BasicSidebar";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-markdown";
+import "ace-builds/src-noconflict/theme-xcode";
 
 const markdown = "# Как спать с мокрыми волосами\n" +
     "Случалось ли вам перед сном оказаться с мокрыми волосами, отсутствием сил или времени их высушить? Если да, то с такой проблемой сталкиваются многие! Спать с мокрыми волосами — не самое правильное решение, но с помощью нескольких простых действий вы сможете защитить волосы, с тем чтобы они не повредились и меньше электризовались. Вы не только сможете лечь спать с мокрыми волосами, но и даже проснуться с потрясающей прической!\n" +
@@ -43,16 +50,82 @@ const markdown = "# Как спать с мокрыми волосами\n" +
     "\n" +
     "Шелковая ткань создает меньше трения, поэтому мокрые волосы с меньшей вероятностью повредятся. Просто откиньте волосы назад так, чтобы они свисали с края шелковой подушки. Так волосы смогут высохнуть естественным путем, пока вы спите, и при этом не примнутся.\n" +
     "- Этот способ больше подходит для тех, у кого прямые волосы.\n" +
-    "- Если у вас волнистые или кудрявые волосы, нанесите на них перед сном средство для формирования кудрей, и вы проснетесь с полноценной прической!"
+    "- Если у вас волнистые или кудрявые волосы, нанесите на них перед сном средство для формирования кудрей, и вы проснетесь с полноценной прической!";
 
-class GuideCentralList extends React.Component {
+class Add extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            preview: false
+        };
+
+        this.StartPreview = this.StartPreview.bind(this);
+        this.EndPreview = this.EndPreview.bind(this);
+    }
+
+    StartPreview() {
+        this.setState({ preview: true });
+    }
+
+    EndPreview() {
+        this.setState({ preview: false });
+    }
+
+    genPreview() {
+        if (this.state.preview) {
+            return (
+                <>
+                    <div className='background' onClick={this.EndPreview} />
+                    <div className='central-list-preview'>
+                        <ReactMarkdown children={markdown} remarkPlugins={[remarkGfm]} />
+                    </div>
+                </>
+            );
+        } else {
+            return (
+                <>
+                </>
+            );
+        }
+    }
+
     render() {
         return (
-            <div className='central-list'>
-                <ReactMarkdown children={markdown} remarkPlugins={[remarkGfm]} />
-            </div>
+            <>
+                <Header />
+                <div className="central-list-wrapper">
+                    <CentralList>
+                        <div className="add-page">
+                            <h1>Добавить гайд</h1>
+                            <input type="text" placeholder="Название" />
+                            <input type="file" />
+                            <AceEditor
+                                width="90%"
+                                height="1000px"
+                                mode="markdown"
+                                theme="twilight"
+                                name="area"
+                                showPrintMargin={true}
+                                showGutter={true}
+                                highlightActiveLine={true}
+                                setOptions={{
+                                    enableBasicAutocompletion: false,
+                                    enableLiveAutocompletion: false,
+                                    enableSnippets: false,
+                                    showLineNumbers: true,
+                                    tabSize: 4,
+                                }}/>
+                            <button onClick={this.StartPreview} >Предпросмотр</button>
+                            <button>Создать</button>
+                        </div>
+                    </CentralList>
+                    <BasicSidebar />
+                </div>
+                <Basement />
+                {this.genPreview()}
+            </>
         )
     }
 }
 
-export default GuideCentralList;
+export default Add;

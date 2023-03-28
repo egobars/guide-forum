@@ -1,5 +1,5 @@
 body {
-    padding: 0 0 150px;
+    padding: 0;
     margin: 0;
     background-color: #f3f3f3;
     font-family: Verdana, serif;
@@ -23,4 +23,27 @@ h2 {
 
 h3 {
     font-size: 22px;
+}
+
+button {
+    background-color: #f74464;
+    font-size: 17px;
+    border: 1px solid black;
+    color: #f3f3f3;
+    padding: 1px 10px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #f3f3f3;
+    color: #f74464;
+    cursor: pointer;
+}
+
+button:focus {
+    border: 2px solid black;
+    padding: 0 9px;
+    cursor: pointer;
 }

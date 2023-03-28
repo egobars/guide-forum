@@ -3,31 +3,54 @@ import "./MainSidebar.css"
 import "../Sidebar.css"
 import LoginPanel from "../UserPanels/LoginPanel/LoginPanel";
 
+const categories_list = [
+    'Искусство и развлечения',
+    'Транспорт',
+    'Компьютеры и электроника',
+    'Образование и коммуникации',
+    'Семейная жизнь',
+    'Финансы и бизнес',
+    'Кулинария и гостеприимство',
+    'Здоровье',
+    'Хобби и рукоделие',
+    'Дом и сад',
+    'Праздники и традиции',
+    'Стиль и уход за собой',
+    'Питомцы и животные',
+    'Философия и религия',
+    'Взаимоотношения',
+    'Спорт и фитнес',
+    'Путешествия',
+    'Мир работы',
+    'Молодежь'
+];
+
 class MainSidebar extends React.Component {
+    GenCategory(i) {
+        return (
+            <div className="categories-list-item">
+                <span>{categories_list[i]}</span>
+            </div>
+        );
+    }
+
+    genCategoriesList() {
+        let result = [];
+        for (let i = 0; i < categories_list.length; ++i) {
+            result.push(this.GenCategory(i));
+        }
+        return result;
+    }
+
     render() {
         return (
             <div className="sidebar">
                 <h2>Категории:</h2>
-                <span>Искусство и развлечения</span>
-                <span>Транспорт</span>
-                <span>Компьютеры и электроника</span>
-                <span>Образование и коммуникации</span>
-                <span>Семейная жизнь</span>
-                <span>Финансы и бизнес</span>
-                <span>Кулинария и гостеприимство</span>
-                <span>Здоровье</span>
-                <span>Хобби и рукоделие</span>
-                <span>Дом и сад</span>
-                <span>Праздники и традиции</span>
-                <span>Стиль и уход за собой</span>
-                <span>Питомцы и животные</span>
-                <span>Философия и религия</span>
-                <span>Взаимоотношения</span>
-                <span>Спорт и фитнес</span>
-                <span>Путешествия</span>
-                <span>Мир работы</span>
-                <span>Молодежь</span>
+                <div className="categories-list">
+                    {this.genCategoriesList()}
+                </div>
                 <LoginPanel />
+                <a href="/add"><button>Добавить статью</button></a>
             </div>
         )
     }

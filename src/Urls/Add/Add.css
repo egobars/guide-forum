@@ -1,0 +1,46 @@
+.add-page {
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.add-page input {
+    font-size: 30px;
+}
+
+.add-page input[type=file] {
+    color: transparent;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 70%;
+    cursor: pointer;
+}
+
+.central-list-preview {
+    width: 743px;
+    min-height: 500px;
+    max-height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: fixed;
+    top: 0;
+    left: calc(50% - 372px);
+    background-color: #f3f3f3;
+    overflow: scroll;
+}
+
+.ace_editor, .ace_editor *{
+    font-family: "Monaco", "Menlo", "Ubuntu Mono", "Droid Sans Mono", "Consolas", monospace !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+}
