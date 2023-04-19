@@ -3,10 +3,21 @@ import './Main.css';
 import Header from "../Components/Header/Header";
 import MainSidebar from "../Components/Sidebars/MainSidebar/MainSidebar";
 import Basement from "../Components/Basement/Basement";
-import data from "../data.json";
 import CentralList from "../Components/CentralList/CentralList";
+import axios from "axios";
+import {base_url} from "../constants";
 
 class Main extends React.Component {
+    guides = [];
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loaded_guides: false
+        };
+    }
+
     genGuidePanel(name, image_src, id) {
         return (
             <div className="guide-panel-a">
@@ -21,20 +32,52 @@ class Main extends React.Component {
     }
 
     genGuidesList() {
-        const obj = data;
-        let guides = [];
-        for (let i = 0; i < 50; ++i) {
-            guides.push(
-                this.genGuidePanel(obj[i.toString()].name, obj[i.toString()].preview, i.toString())
-            )
+        if (this.state.loaded_guides) {
+            const data = this.guides;
+            let guides = [];
+            for (let i = 0; i < Math.min(50, data.length); ++i) {
+                guides.push(
+                    this.genGuidePanel(data[i].title, data[i].preview[0].image, data[i].id.toString())
+                )
+            }
+            return guides;
+        } else {
+            return (
+                <span>...</span>
+            );
         }
-        return guides;
+    }
+
+    loadGuides() {
+        let url = base_url + '/Guides';
+        const query_params = new URLSearchParams(window.location.search);
+        if (query_params.get('theme') != null) {
+            url = base_url + '/GuidesTheme?theme=' + query_params.get('theme');
+        }
+        axios.get(url).then(res => {
+            this.guides = [];
+            let data = res.data;
+            for (let i = 0; i < data.length; ++i) {
+                this.guides.push({
+                    id: data[i].id,
+                    title: data[i].title,
+                    preview: data[i].preview
+                });
+            }
+            this.setState({
+                loaded_guides: true
+            });
+        });
+    }
+
+    componentDidMount() {
+        this.loadGuides();
     }
 
     render() {
         return (
             <>
-                <Header />
+                <Header user={this.props.user} />
                 <div className="central-list-wrapper">
                     <CentralList>
                         <h2>Последние гайды:</h2>
@@ -42,7 +85,7 @@ class Main extends React.Component {
                             {this.genGuidesList()}
                         </div>
                     </CentralList>
-                    <MainSidebar />
+                    <MainSidebar user={this.props.user} login={this.props.login} logout={this.props.logout} register={this.props.register} />
                 </div>
                 <Basement />
             </>

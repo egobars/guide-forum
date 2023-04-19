@@ -8,6 +8,9 @@ class Header extends React.Component {
                 <div className='logo-text'>
                     <a href="/">Guide forum</a>
                 </div>
+                <div className='header-user-panel'>
+                    <span>{this.props.user}</span>
+                </div>
             </div>
         )
     }
