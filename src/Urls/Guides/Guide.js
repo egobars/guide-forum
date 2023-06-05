@@ -8,6 +8,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {base_url} from "../../constants";
 import axios from "axios";
+import CommentsList from "../../Components/Comments/CommentsList/CommentsList";
+import AddComment from "../../Components/Comments/AddComment/AddComment";
 
 class Guide extends React.Component {
     guide = '';
@@ -37,7 +39,6 @@ class Guide extends React.Component {
 
     loadGuide() {
         let url = base_url + '/Guide/?id=' + this.state.id;
-        console.log(url);
         axios.get(url).then(res => {
             this.guide = res.data.text;
             this.setState({loaded_guide: true})
@@ -63,12 +64,15 @@ class Guide extends React.Component {
     render() {
         return (
             <>
-                <Header />
+                <Header user={this.props.user} />
                 <div className="central-list-wrapper">
                     <CentralList>
                         {this.genGuide()}
+                        <h2>Комментарии:</h2>
+                        <CommentsList id={this.state.id} />
+                        <AddComment user={this.props.user} />
                     </CentralList>
-                    <BasicSidebar />
+                    <BasicSidebar user={this.props.user} login={this.props.login} logout={this.props.logout} register={this.props.register} />
                 </div>
                 <Basement />
             </>

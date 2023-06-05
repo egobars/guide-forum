@@ -2,6 +2,8 @@ import React from "react";
 import "./MainSidebar.css"
 import "../Sidebar.css"
 import LoginPanel from "../UserPanels/LoginPanel/LoginPanel";
+import RegistrationPanel from "../UserPanels/RegistrationPanel/RegistrationPanel";
+import CurrentUserPanel from "../UserPanels/CurrentUserPanel/CurrentUserPanel";
 
 const categories_list = [
     'Искусство и развлечения',
@@ -67,16 +69,37 @@ class MainSidebar extends React.Component {
     }
 
     render() {
-        return (
-            <div className="sidebar">
-                <h2>Категории:</h2>
-                <div className="categories-list">
-                    {this.genCategoriesList()}
+        if (this.props.user === null) {
+            return (
+                <div className="sidebar">
+                    <h2>Категории:</h2>
+                    <div className="categories-list">
+                        {this.genCategoriesList()}
+                    </div>
+                    <LoginPanel user={this.props.user} login={this.props.login} logout={this.props.logout}
+                                register={this.props.register}/>
+                    <RegistrationPanel user={this.props.user} login={this.props.login} logout={this.props.logout}
+                                       register={this.props.register}/>
+                    <a className="add-button" href="/add">
+                        <button>Добавить статью</button>
+                    </a>
                 </div>
-                <LoginPanel user={this.props.user} login={this.props.login} logout={this.props.logout} register={this.props.register} />
-                <a href="/add"><button>Добавить статью</button></a>
-            </div>
-        )
+            )
+        } else {
+            return (
+                <div className="sidebar">
+                    <h2>Категории:</h2>
+                    <div className="categories-list">
+                        {this.genCategoriesList()}
+                    </div>
+                    <CurrentUserPanel user={this.props.user} login={this.props.login} logout={this.props.logout}
+                                register={this.props.register}/>
+                    <a className="add-button" href="/add">
+                        <button>Добавить статью</button>
+                    </a>
+                </div>
+            )
+        }
     }
 }
 

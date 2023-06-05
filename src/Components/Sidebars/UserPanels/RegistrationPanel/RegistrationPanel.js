@@ -1,12 +1,13 @@
 import React from "react";
-import './LoginPanel.css';
+import './RegistrationPanel.css';
 import '../UserPanel.css';
 
-class LoginPanel extends React.Component {
+class RegistrationPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             login: '',
+            email: '',
             password: ''
         };
 
@@ -17,28 +18,31 @@ class LoginPanel extends React.Component {
     handleChange(event) {
         this.setState({
             login: event.target.form[0].value,
-            password: event.target.form[1].value
+            email: event.target.form[1].value,
+            password: event.target.form[2].value
         });
     }
 
     handleSubmit(event) {
-        this.props.login(event, this.state.login, this.state.password);
+        this.props.register(event, this.state.login, this.state.email, this.state.password);
     }
 
     render() {
         return (
             <div className='user-panel'>
                 <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
-                    <h2>Вход:</h2>
+                    <h2>Регистрация:</h2>
+                    <span>Логин:</span>
+                    <input name='username' type='text' />
                     <span>E-mail:</span>
                     <input name='email' type='text' />
                     <span>Пароль:</span>
                     <input name='password' type='password' />
-                    <button>Войти</button>
+                    <button>Зарегистрироваться</button>
                 </form>
             </div>
         )
     }
 }
 
-export default LoginPanel;
+export default RegistrationPanel;

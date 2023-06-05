@@ -12,7 +12,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            user: 'anonymousUser',
+            user: null,
         };
 
         this.login = this.login.bind(this);
@@ -25,30 +25,47 @@ class App extends React.Component {
         axios.get(url).then(res => {
             let data = res.data;
             console.log(data);
-            this.setState({
-                user: data
-            });
+            if (data !== 'anonymousUser') {
+                this.setState({
+                    user: data
+                });
+            }
         });
     }
 
     async login(event, username, password) {
         event.preventDefault();
-        let data = {
-            username: username,
+        /*let data = {
+            email: username,
             password: password
-        };
+        };*/
 
-        await axios.post(base_url + '/log', data, { withCredentials: true }).then(res => {
+        const config = {
+            url: base_url + '/log',
+            method: 'post',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                'email': 'aaa',
+                'password': 'aaa'
+            },
+            maxRedirects: 0
+        }
+
+        await axios(config).then(res => {
             console.log(res);
+            console.log(res.headers["set-cookie"]);
             this.getUser();
         }).catch((error) => {
-            // will be called if there was an error
             console.error(error);
         });
     }
 
     logout() {
-
+        this.setState({
+            user: null
+        });
     }
 
     register() {

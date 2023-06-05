@@ -1,0 +1,22 @@
+.comment {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    max-width: 850px;
+}
+
+.comment-user-date-panel {
+    color: gray;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.comment-user-date-panel span {
+    font-size: 15px;
+}
+
+hr {
+    width: 100%;
+    color: black;
+}

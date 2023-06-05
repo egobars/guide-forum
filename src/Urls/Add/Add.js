@@ -7,9 +7,9 @@ import BasicSidebar from "../../Components/Sidebars/BasicSidebar/BasicSidebar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AceEditor from "react-ace";
-
 import "ace-builds/src-noconflict/mode-markdown";
-import "ace-builds/src-noconflict/theme-xcode";
+import {base_url} from "../../constants";
+import axios from "axios";
 
 const markdown = "# Как спать с мокрыми волосами\n" +
     "Случалось ли вам перед сном оказаться с мокрыми волосами, отсутствием сил или времени их высушить? Если да, то с такой проблемой сталкиваются многие! Спать с мокрыми волосами — не самое правильное решение, но с помощью нескольких простых действий вы сможете защитить волосы, с тем чтобы они не повредились и меньше электризовались. Вы не только сможете лечь спать с мокрыми волосами, но и даже проснуться с потрясающей прической!\n" +
@@ -52,15 +52,60 @@ const markdown = "# Как спать с мокрыми волосами\n" +
     "- Этот способ больше подходит для тех, у кого прямые волосы.\n" +
     "- Если у вас волнистые или кудрявые волосы, нанесите на них перед сном средство для формирования кудрей, и вы проснетесь с полноценной прической!";
 
+const categories_list = [
+    'Искусство и развлечения',
+    'Транспорт',
+    'Компьютеры и электроника',
+    'Образование и коммуникации',
+    'Семейная жизнь',
+    'Финансы и бизнес',
+    'Кулинария и гостеприимство',
+    'Здоровье',
+    'Хобби и рукоделие',
+    'Праздники и традиции',
+    'Дом и сад',
+    'Стиль и уход за собой',
+    'Питомцы и животные',
+    'Философия и религия',
+    'Взаимоотношения',
+    'Спорт и фитнес',
+    'Путешествия',
+    'Мир работы',
+    'Молодёжь'
+];
+
+const categories_list_a = [
+    'arts_and_entertainments',
+    'cars_ant_other_vehicles',
+    'computers_and_electronics',
+    'education_and_communications',
+    'family_life',
+    'finance_and_business',
+    'food_and_entertaining',
+    'health',
+    'hobbies_and_crafts',
+    'holidays_and_traditions',
+    'home_and_garden',
+    'personal_care_and_style',
+    'pets_and_animals',
+    'philosophy_and_religion',
+    'relationships',
+    'sports_and_fitness',
+    'travel',
+    'work_world',
+    'youth'
+];
+
 class Add extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            preview: false
+            preview: false,
         };
 
         this.StartPreview = this.StartPreview.bind(this);
         this.EndPreview = this.EndPreview.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     StartPreview() {
@@ -89,21 +134,61 @@ class Add extends React.Component {
         }
     }
 
+    genThemeSelector() {
+        let options = []
+        for (let i = 0; i < categories_list.length; ++i) {
+            options.push(<option value={categories_list_a[i]}>{categories_list[i]}</option>)
+        }
+        return (
+            <select>
+                {options}
+            </select>
+        )
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        const config = {
+            url: base_url + '/Guide/create',
+            method: 'post',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                'preview': [event.target[1].value],
+                'text': event.target[3].value,
+                'theme': [event.target[2].value],
+                'title': event.target[0].value,
+                'user': { 'username': "aaa" }
+            },
+        }
+
+        await axios(config).then(res => {
+            console.log(res);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
     render() {
         return (
             <>
-                <Header />
+                <Header user={this.props.user} />
                 <div className="central-list-wrapper">
                     <CentralList>
-                        <div className="add-page">
+                        <form className="add-page" onSubmit={this.handleSubmit}>
                             <h1>Добавить гайд</h1>
+                            <h2>Название</h2>
                             <input type="text" placeholder="Название" />
-                            <input type="file" />
+                            <h2>Превью</h2>
+                            <input type="text" placeholder="Ссылка на превью" />
+                            <h2>Тема</h2>
+                            {this.genThemeSelector()}
+                            <h2>Текст</h2>
                             <AceEditor
                                 width="90%"
                                 height="1000px"
                                 mode="markdown"
-                                theme="twilight"
                                 name="area"
                                 showPrintMargin={true}
                                 showGutter={true}
@@ -117,9 +202,9 @@ class Add extends React.Component {
                                 }}/>
                             <button onClick={this.StartPreview} >Предпросмотр</button>
                             <button>Создать</button>
-                        </div>
+                        </form>
                     </CentralList>
-                    <BasicSidebar />
+                    <BasicSidebar user={this.props.user} login={this.props.login} logout={this.props.logout} register={this.props.register} />
                 </div>
                 <Basement />
                 {this.genPreview()}

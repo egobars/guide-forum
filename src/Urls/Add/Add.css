@@ -7,11 +7,15 @@
 }
 
 .add-page input {
-    font-size: 30px;
+    font-size: 25px;
 }
 
-.add-page input[type=file] {
-    color: transparent;
+.add-page select {
+    font-size: 25px;
+}
+
+.add-page h2 {
+    margin: 0;
 }
 
 .background {
@@ -23,6 +27,7 @@
     background-color: black;
     opacity: 70%;
     cursor: pointer;
+    z-index: 1000;
 }
 
 .central-list-preview {
@@ -36,6 +41,7 @@
     left: calc(50% - 372px);
     background-color: #f3f3f3;
     overflow: scroll;
+    z-index: 1001;
 }
 
 .ace_editor, .ace_editor *{

@@ -1,0 +1,15 @@
+.post-comment-text {
+    width: 100%;
+}
+
+.post-comment-button {
+    font-size: 20px;
+    width: 120px;
+}
+
+.post-comment {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
