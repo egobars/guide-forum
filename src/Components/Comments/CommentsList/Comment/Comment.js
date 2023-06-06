@@ -6,7 +6,7 @@ class Comment extends React.Component {
         return (
             <div className="comment">
                 <div className="comment-user-date-panel">
-                    <span>{this.props.author}</span>
+                    <span>Анонимный пользователь</span>
                     <span>{this.props.created}</span>
                 </div>
                 <hr />

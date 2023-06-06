@@ -30,8 +30,8 @@ class LoginPanel extends React.Component {
             <div className='user-panel'>
                 <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
                     <h2>Вход:</h2>
-                    <span>E-mail:</span>
-                    <input name='email' type='text' />
+                    <span>Username:</span>
+                    <input name='username' type='text' />
                     <span>Пароль:</span>
                     <input name='password' type='password' />
                     <button>Войти</button>

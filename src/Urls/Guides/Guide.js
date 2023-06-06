@@ -13,14 +13,18 @@ import AddComment from "../../Components/Comments/AddComment/AddComment";
 
 class Guide extends React.Component {
     guide = '';
+    comments_list = []
 
     constructor(props) {
         super(props);
 
         this.state = {
             id: '-1',
-            loaded_guide: false
+            loaded_guide: false,
+            loaded_comments: false
         };
+
+        this.loadComments = this.loadComments.bind(this);
     }
 
     genGuide() {
@@ -45,9 +49,28 @@ class Guide extends React.Component {
         });
     }
 
+    loadComments() {
+        if (this.state.id !== '-1') {
+            let url = base_url + '/comment/guide?id=' + this.state.id;
+            axios.get(url).then(res => {
+                console.log(res);
+                this.comments_list = [];
+                for (let i = 0; i < res.data.length; ++i) {
+                    this.comments_list.push({
+                        text: res.data[i].text
+                    });
+                }
+                this.setState({
+                    loaded_comments: true
+                });
+            });
+        }
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.id !== this.state.id) {
             this.loadGuide();
+            this.loadComments();
         }
     }
 
@@ -69,8 +92,8 @@ class Guide extends React.Component {
                     <CentralList>
                         {this.genGuide()}
                         <h2>Комментарии:</h2>
-                        <CommentsList id={this.state.id} />
-                        <AddComment user={this.props.user} />
+                        <CommentsList id={this.state.id} comments_list={this.comments_list} loaded_comments={this.state.loaded_comments} />
+                        <AddComment user={this.props.user} id={this.state.id} load_comments={this.loadComments} />
                     </CentralList>
                     <BasicSidebar user={this.props.user} login={this.props.login} logout={this.props.logout} register={this.props.register} />
                 </div>

@@ -10,6 +10,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-markdown";
 import {base_url} from "../../constants";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 const markdown = "# Как спать с мокрыми волосами\n" +
     "Случалось ли вам перед сном оказаться с мокрыми волосами, отсутствием сил или времени их высушить? Если да, то с такой проблемой сталкиваются многие! Спать с мокрыми волосами — не самое правильное решение, но с помощью нескольких простых действий вы сможете защитить волосы, с тем чтобы они не повредились и меньше электризовались. Вы не только сможете лечь спать с мокрыми волосами, но и даже проснуться с потрясающей прической!\n" +
@@ -101,11 +102,14 @@ class Add extends React.Component {
         super(props);
         this.state = {
             preview: false,
+            text: '',
+            redirect: false
         };
 
         this.StartPreview = this.StartPreview.bind(this);
         this.EndPreview = this.EndPreview.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     StartPreview() {
@@ -122,7 +126,7 @@ class Add extends React.Component {
                 <>
                     <div className='background' onClick={this.EndPreview} />
                     <div className='central-list-preview'>
-                        <ReactMarkdown children={markdown} remarkPlugins={[remarkGfm]} />
+                        <ReactMarkdown children={this.state.text} remarkPlugins={[remarkGfm]} />
                     </div>
                 </>
             );
@@ -159,7 +163,7 @@ class Add extends React.Component {
                 'text': event.target[3].value,
                 'theme': [event.target[2].value],
                 'title': event.target[0].value,
-                'user': { 'username': "aaa" }
+                'user': { 'username': this.props.user }
             },
         }
 
@@ -168,41 +172,64 @@ class Add extends React.Component {
         }).catch((error) => {
             console.error(error);
         });
+        this.setState({ 'redirect': true });
+    }
+
+    onChange(value) {
+        this.setState({ text: value });
+    }
+
+    genForm() {
+        if (this.props.user != null) {
+            return (
+                <form className="add-page" onSubmit={this.handleSubmit}>
+                    <h1>Добавить гайд</h1>
+                    <h2>Название</h2>
+                    <input type="text" placeholder="Название" />
+                    <h2>Превью</h2>
+                    <input type="text" placeholder="Ссылка на превью" />
+                    <h2>Тема</h2>
+                    {this.genThemeSelector()}
+                    <h2>Текст</h2>
+                    <AceEditor
+                        onChange={this.onChange}
+                        width="90%"
+                        height="1000px"
+                        mode="markdown"
+                        name="area"
+                        showPrintMargin={true}
+                        showGutter={true}
+                        highlightActiveLine={true}
+                        setOptions={{
+                            enableBasicAutocompletion: false,
+                            enableLiveAutocompletion: false,
+                            enableSnippets: false,
+                            showLineNumbers: true,
+                            tabSize: 4,
+                        }}/>
+                    <button type="button" onClick={this.StartPreview} >Предпросмотр</button>
+                    <button type="submit">Создать</button>
+                </form>
+            )
+        } else {
+            return (
+                <h2>Для добавления гайда необходимо авторизоваться.</h2>
+            );
+        }
     }
 
     render() {
+        if (this.state.redirect) {
+            return (
+                <Navigate to={'/'} />
+            );
+        }
         return (
             <>
                 <Header user={this.props.user} />
                 <div className="central-list-wrapper">
                     <CentralList>
-                        <form className="add-page" onSubmit={this.handleSubmit}>
-                            <h1>Добавить гайд</h1>
-                            <h2>Название</h2>
-                            <input type="text" placeholder="Название" />
-                            <h2>Превью</h2>
-                            <input type="text" placeholder="Ссылка на превью" />
-                            <h2>Тема</h2>
-                            {this.genThemeSelector()}
-                            <h2>Текст</h2>
-                            <AceEditor
-                                width="90%"
-                                height="1000px"
-                                mode="markdown"
-                                name="area"
-                                showPrintMargin={true}
-                                showGutter={true}
-                                highlightActiveLine={true}
-                                setOptions={{
-                                    enableBasicAutocompletion: false,
-                                    enableLiveAutocompletion: false,
-                                    enableSnippets: false,
-                                    showLineNumbers: true,
-                                    tabSize: 4,
-                                }}/>
-                            <button onClick={this.StartPreview} >Предпросмотр</button>
-                            <button>Создать</button>
-                        </form>
+                        {this.genForm()}
                     </CentralList>
                     <BasicSidebar user={this.props.user} login={this.props.login} logout={this.props.logout} register={this.props.register} />
                 </div>

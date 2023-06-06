@@ -21,24 +21,11 @@ class App extends React.Component {
     }
 
     getUser() {
-        let url = base_url + '/user';
-        axios.get(url).then(res => {
-            let data = res.data;
-            console.log(data);
-            if (data !== 'anonymousUser') {
-                this.setState({
-                    user: data
-                });
-            }
-        });
+        this.setState({'user': localStorage.getItem('user')})
     }
 
     async login(event, username, password) {
         event.preventDefault();
-        /*let data = {
-            email: username,
-            password: password
-        };*/
 
         const config = {
             url: base_url + '/log',
@@ -47,15 +34,13 @@ class App extends React.Component {
                 'content-type': 'application/json',
             },
             data: {
-                'email': 'aaa',
-                'password': 'aaa'
+                'email': username,
+                'password': password
             },
-            maxRedirects: 0
         }
 
         await axios(config).then(res => {
-            console.log(res);
-            console.log(res.headers["set-cookie"]);
+            localStorage.setItem('user', username);
             this.getUser();
         }).catch((error) => {
             console.error(error);
@@ -63,13 +48,32 @@ class App extends React.Component {
     }
 
     logout() {
-        this.setState({
-            user: null
-        });
+        localStorage.removeItem('user');
+        this.getUser();
     }
 
-    register() {
+    async register(event, username, email, password) {
+        event.preventDefault();
 
+        const config = {
+            url: base_url + '/reg',
+            method: 'post',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                'username': username,
+                'email': email,
+                'password': password
+            },
+        }
+
+        await axios(config).then(res => {
+            localStorage.setItem('user', res.body.email);
+            this.getUser();
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     getContent() {
