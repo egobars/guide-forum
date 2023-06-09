@@ -69,7 +69,7 @@ class App extends React.Component {
         }
 
         await axios(config).then(res => {
-            localStorage.setItem('user', res.body.email);
+            localStorage.setItem('user', username);
             this.getUser();
         }).catch((error) => {
             console.error(error);
